@@ -1,0 +1,9 @@
+node_modules
+.DS_Store
+dist
+build
+.env
+packages/overlay/.env
+packages/overlay/config.json
+packages/voice-notes/events
+tests/tmp-config.json

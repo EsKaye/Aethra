@@ -1,0 +1,20 @@
+{
+  "name": "overlay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "node server.js"
+  },
+  "dependencies": {
+    "svelte": "^4.0.0",
+    "ws": "^8.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.0",
+    "vite": "^4.0.0"
+  }
+}

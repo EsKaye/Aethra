@@ -1,0 +1,11 @@
+{
+  "name": "aethra",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "bless": "node packages/dev-blessing/blessing.js",
+    "test": "node --test tests",
+    "overlay:server": "npm --workspace overlay run server"
+  }
+}
