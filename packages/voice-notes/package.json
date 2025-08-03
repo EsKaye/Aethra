@@ -1,0 +1,12 @@
+{
+  "name": "voice-notes",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "chrono-node": "^2.6.0",
+    "ics": "^2.41.0",
+    "node-schedule": "^2.1.1",
+    "openai": "^4.0.0"
+  }
+}
