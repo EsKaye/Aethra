@@ -5,7 +5,8 @@ const { spawn } = require('node:child_process');
 const WebSocket = require('ws');
 const fs = require('node:fs');
 const path = require('node:path');
-const { scheduleReminder } = require('../packages/voice-notes');
+const { scheduleReminder, processWhisper } = require('../packages/voice-notes');
+const { mockOpenAI, mockCreateEvent } = require('./mocks/factories');
 
 test('overlay server persists config and enforces rate limits', async () => {
   const configPath = path.join(__dirname, 'tmp-config.json');
@@ -56,10 +57,37 @@ test('scheduleReminder creates calendar artifacts', () => {
   fs.rmSync(eventsDir, { recursive: true, force: true });
   fs.mkdirSync(eventsDir, { recursive: true });
 
-  const result = scheduleReminder('remind me in 5 minutes to stretch');
+  const result = scheduleReminder('remind me in 10 minutes to stretch', {
+    createEvent: mockCreateEvent(),
+    timeMultiplier: 600 // accelerate 10m -> ~1s
+  });
   assert.ok(result && result.id);
+
+  // Ensure the reminder was scheduled in the near future.
+  const diff = result.date.getTime() - Date.now();
+  assert.ok(diff < 2000, `expected <2s but got ${diff}`);
 
   const icsPath = path.join(eventsDir, `${result.id}.ics`);
   assert.ok(fs.existsSync(icsPath));
+  const contents = fs.readFileSync(icsPath, 'utf-8');
+  assert.equal(contents, 'FAKE_ICS');
+});
+
+test('processWhisper schedules reminders via mocked OpenAI', async () => {
+  const transcript = 'remind me tomorrow to meditate';
+  const openai = mockOpenAI(transcript);
+
+  let scheduled = null;
+  const scheduleFn = text => {
+    scheduled = text;
+    return null;
+  };
+
+  await processWhisper(Buffer.from('fake'), {
+    openAIClient: openai,
+    scheduleReminder: scheduleFn
+  });
+
+  assert.equal(scheduled, transcript);
 });
 
