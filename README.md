@@ -23,6 +23,16 @@ npm test               # Run end-to-end guardians
 npm run overlay:server # Launch overlay WebSocket server (requires OVERLAY_WS_TOKEN)
 ```
 
+### Scheduler Time Multiplier
+
+`SCHEDULER_TIME_MULTIPLIER` lets you warp time for reminders. Setting it to `600` turns a 10‑minute delay into roughly one second—handy for tests and demos where the cosmos can't wait. You can also override this value on the fly:
+
+```bash
+node packages/voice-notes/index.js --time-multiplier=600
+# or point to a JSON config file containing {"timeMultiplier":600}
+node packages/voice-notes/index.js --config=voice.json
+```
+
 ### CI Guardians
 Continuous integration watches from the heavens. A GitHub Action runs `npm test` on each push, ensuring every ritual remains pure.
 
